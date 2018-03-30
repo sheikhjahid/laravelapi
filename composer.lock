@@ -4,9 +4,94 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "21d081fdf246b01350517239cedda243",
-    "content-hash": "6e0a68f99f3466a7afa68ce993d670d0",
+    "hash": "91a3c7e519c5640b5d57a13129606f3b",
+    "content-hash": "eb7a65cf4eb50248f0825b7106349659",
     "packages": [
+        {
+            "name": "astbss/entrust54",
+            "version": "v5.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/astbss/entrust54.git",
+                "reference": "5eee038132bbee096e3bd1f885975ab39361c489"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/astbss/entrust54/zipball/5eee038132bbee096e3bd1f885975ab39361c489",
+                "reference": "5eee038132bbee096e3bd1f885975ab39361c489",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/cache": "~5.5.0",
+                "illuminate/console": "~5.5.0",
+                "illuminate/support": "~5.5.0",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "illuminate/database": "~5.5.0",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "^5.2",
+                "sami/sami": "dev-master"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Zizaco\\Entrust\\EntrustServiceProvider"
+                    ],
+                    "aliases": {
+                        "Entrust": "Zizaco\\Entrust\\EntrustFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/commands"
+                ],
+                "psr-4": {
+                    "Zizaco\\Entrust\\": "src/Entrust/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Elkins",
+                    "homepage": "http://andrewelkins.com"
+                },
+                {
+                    "name": "Zizaco Zizuini",
+                    "email": "zizaco@gmail.com"
+                },
+                {
+                    "name": "Ben Batschelet",
+                    "homepage": "http://github.com/bbatsche"
+                },
+                {
+                    "name": "Michele Angioni",
+                    "email": "michele.angioni@gmail.com"
+                },
+                {
+                    "name": "Are Casilla",
+                    "email": "are@astbss.com",
+                    "homepage": "https://astbss.github.io"
+                }
+            ],
+            "description": "This package provides a flexible way to add Role-based Permissions to Laravel 5.5",
+            "homepage": "https://github.com/astbss/entrust54",
+            "keywords": [
+                "acl",
+                "astbss",
+                "auth",
+                "illuminate",
+                "laravel",
+                "permission",
+                "roles"
+            ],
+            "time": "2017-09-24 09:52:58"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",

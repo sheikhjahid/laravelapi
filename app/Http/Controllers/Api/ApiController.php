@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 use App\User;
+use App\Role;
+use App\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -84,14 +86,65 @@ class ApiController extends Controller
 		// the token is valid and we have found the user via the sub claim
 		return response()->json(compact('user'));
 	}//end of function
-     
 
-     public function logout()
-     {
-     	$data = JWTAuth::parseToken()->invalidate();
-     	return response()->json(['message'=>'User Logged Out Successfully!!',
-     							 'data' => $data,
-     							]);
+
+	public function logout()
+	{
+		$data = JWTAuth::parseToken()->invalidate();
+		return response()->json(['message'=>'User Logged Out Successfully!!',
+			'data' => $data,
+		]);
      }//end of function
+
+     public function addRole()
+     {
+
+     	$admin = new Role();
+     	$admin->name         = 'admin';
+        $admin->display_name = 'User Administrator'; // optional
+        $admin->description  = 'User is allowed to manage and edit other users'; // optional
+        $admin->save();
+
+        $general_user = new Role();
+        $general_user->name = 'user';
+        $general_user->display_name = 'Application_User';
+        $general_user->description = 'Application User is only allowed to view and play Tracks';
+        $general_user->save();
+
+        return response()->json(['data_user'=>$general_user]);
+       
+    }//end of class
+
+    public function addPermissions(Request $request)
+    {
+    	$inputData = $request->all();
+    	return Permission::insertData($inputData);
+
+    }//end of function
+
+    public function assignRole()
+    {
+    	$user = User::where('email','jahid@itobuz.com')->first();
+
+    	$admin = Role::where('name','admin')->first();
+
+    	return $user->attachRole($admin);
+
+    }//end of function
+
+    public function assignPermission()
+    {
+
+    	$create_users = Permission::where('name','Create Users')->first();
+        
+    	$edit_users   = Permission::where('name','Edit Users')->first();
+
+    	$delete_users = Permission::where('name','Delete Users')->first();
+
+    	$admin_role   = Role::where('name','admin')->first();
+
+    	return $admin_role->attachPermissions(array($create_users,$edit_users,$delete_users));
+    	
+    }//end of function
 
 }//end of class
