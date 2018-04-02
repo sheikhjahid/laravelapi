@@ -116,14 +116,14 @@ class ApiController extends Controller
 
    		$credentials = $request->only('email,name');
    		$rules = [
-   			'email' => 'required|email|max:255',
+   			'email' => 'required|email|max:255|unique:users',
    			'name' => 'required|max:255'
    		];
    		$validator = Validator::make($credentials,$rules);
    		if($validator->fails())
    		{
    			return response()->json([
-   				'success' => error,
+   				'success' => false,
    				'message'=>$validator->messages(),
    				'status_code'=>404
    		         ]);
