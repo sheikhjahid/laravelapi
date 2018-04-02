@@ -96,55 +96,91 @@ class ApiController extends Controller
 		]);
      }//end of function
 
-     public function addRole()
+     public function addRole(Request $request)
      {
 
-     	$admin = new Role();
-     	$admin->name         = 'admin';
-        $admin->display_name = 'User Administrator'; // optional
-        $admin->description  = 'User is allowed to manage and edit other users'; // optional
-        $admin->save();
-
-        $general_user = new Role();
-        $general_user->name = 'user';
-        $general_user->display_name = 'Application_User';
-        $general_user->description = 'Application User is only allowed to view and play Tracks';
-        $general_user->save();
-
-        return response()->json(['data_user'=>$general_user]);
+     	$inputData = $request->all();
+     	return Role::create($inputData);
        
     }//end of class
 
     public function addPermissions(Request $request)
     {
     	$inputData = $request->all();
-    	return Permission::insertData($inputData);
+    	return Permission::create($inputData);
 
     }//end of function
 
-    public function assignRole()
+   public function assignRole(Request $request)
+   {
+
+   		$credentials = $request->only('email,name');
+   		$rules = [
+   			'email' => 'required|email|max:255',
+   			'name' => 'required|max:255'
+   		];
+   		$validator = Validator::make($credentials,$rules);
+   		if($validator->fails())
+   		{
+   			return response()->json([
+   				'success' => error,
+   				'message'=>$validator->messages(),
+   				'status_code'=>404
+   		         ]);
+   		}//end of if
+
+   		$email = User::where('email',$request->email)->first();
+   		$role = Role::where('name',$request->name)->first();
+
+   		return response()->json([
+   			                  'messages'=>'Role Assigned Successfully!!',
+   			                  'data'=>$email->attachRole($role),
+   			                  'status_code'=>200
+   		                       ]);
+
+   }//end of function
+
+   public function assignPermission(Request $request)
+   {
+
+   		$role = Role::where('name',$request->name)->first();
+   		$permission = Permission::where('display_name',$request->display_name)->first();
+   		return  $role->attachPermission($permission);
+
+   }//end of function
+
+    public function allUser()
     {
-    	$user = User::where('email','jahid@itobuz.com')->first();
-
-    	$admin = Role::where('name','admin')->first();
-
-    	return $user->attachRole($admin);
-
+    	return User::all();
     }//end of function
 
-    public function assignPermission()
+    public function searchUser(Request $request)
     {
+    	$searchInput = $request->name;
+    	if (User::getUser($searchInput)==true)
+    		{
+    			return response()->json(['message'=>'Found User!!',
+    									 'data' => User::getUser($searchInput),
+    									 'status_code' => 200]);
+    		}//end of if
+    		
+    }//end of function
 
-    	$create_users = Permission::where('name','Create Users')->first();
-        
-    	$edit_users   = Permission::where('name','Edit Users')->first();
+    public function updateUser(Request $request, $id)
+    {
+    	$inputData = $request->all();
+    	if (User::updateData($id,$inputData)==1)
+    		{
+    			return response()->json([
+    				'message' => 'User Details updated successfully!!',
+    				'data' => User::find($id)
+    			]);
+    		}
+    }//end of function
 
-    	$delete_users = Permission::where('name','Delete Users')->first();
-
-    	$admin_role   = Role::where('name','admin')->first();
-
-    	return $admin_role->attachPermissions(array($create_users,$edit_users,$delete_users));
-    	
+    public function deleteUser($id)
+    {
+    	return User::deleteData($id);
     }//end of function
 
 }//end of class

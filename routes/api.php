@@ -28,10 +28,14 @@ Route::group(['middleware' => ['jwt.auth']], function ()
 	Route::get('searchTrack/{id}', 'Api\MusicController@search');
 	Route::post('updateTrack/{id}','Api\MusicController@update');
 	Route::get('deleteTrack/{id}','Api\MusicController@delete');
-	Route::get('add_role','Api\ApiController@addRole');
+	Route::get('allUsers','Api\ApiController@allUser');
+	Route::post('searchUser','Api\ApiController@searchUser');
+	Route::post('updateUser/{id}','Api\ApiController@updateUser');
+	Route::get('deleteUser/{id}','Api\ApiController@deleteUser');
+	Route::post('add_role','Api\ApiController@addRole');
     Route::post('add_permissions','Api\ApiController@addPermissions');
-    Route::get('assign_role','Api\ApiController@assignRole');
-    Route::get('assign_permission','Api\ApiController@assignPermission');
+    Route::post('assign_role','Api\ApiController@assignRole');
+    Route::post('assign_permission','Api\ApiController@assignPermission');
 	Route::get('logout','Api\ApiController@logout');
 });
 

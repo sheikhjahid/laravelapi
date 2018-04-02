@@ -8,11 +8,12 @@ use Zizaco\Entrust\EntrustPermission;
 class Permission extends EntrustPermission
 {
    
-	public static function insertData($data)
-	{
+   protected $fillable = [
 
-		return Permission::create($data);
+   	'name',
+   	'display_name',
+   	'description',
 
-	}//end of function
+   ];
 
 }//end of class

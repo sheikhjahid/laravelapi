@@ -30,7 +30,22 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public static function updateData($id,$data)
+    {
 
+        return User::where('id',$id)->update($data);
+
+    }//end of function
+
+    public function deleteData($id)
+    {
+        return User::where('id',$id)->delete();
+    }//end of function
+
+    public static function getUser($data)
+    {
+        return User::where('email','LIKE',"%{$data}%")->orWhere('name','LIKE',"%{$data}%")->get();    
+    }//end of function 
 
     
 }//end of class
