@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register','Api\ApiController@register');
 Route::post('login','Api\ApiController@login');
-Route::group(['middleware' => ['jwt.auth','admin']], function () 
+Route::group(['middleware' => ['jwt.auth','role:Admin']], function () 
 {
 	Route::get('get-profile-admin', 'Api\ApiController@getAuthenticatedUser');
 	Route::get('allTracks','Api\MusicController@index');
@@ -40,7 +40,7 @@ Route::group(['middleware' => ['jwt.auth','admin']], function ()
 	Route::get('logout-admin','Api\ApiController@logout');
 });
 
-Route::group(['middleware'=>['jwt.auth','user']], function()
+Route::group(['middleware'=>['jwt.auth','role:User']], function()
 {
 	Route::get('get-profile-user', 'Api\ApiController@getAuthenticatedUser');
 	Route::get('allTrack','Api\MusicController@index');

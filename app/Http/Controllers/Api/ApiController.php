@@ -217,10 +217,15 @@ class ApiController extends Controller
 
     public function getAdmin()
     {
+    	$admins = User::whereHas('Roles', function($q)
+    		{
+    			$q->where('name','Admin');
+    		})->get();
 
     	return response()->json([
     		'message' => 'User Role Details',
-    		'Is User Admin?' => JWTAuth::parseToken()->authenticate()->hasRole('Admin'),
+    		'Is Users Admin?' => JWTAuth::parseToken()->authenticate()->hasRole('Admin'),
+    		'data' => $admins,
     		'status_code' => 200
 
     		]);
@@ -229,11 +234,15 @@ class ApiController extends Controller
 
     public function getUser()
     {
+    	$users  = User::whereHas('Roles', function($q)
+    	{
+    		$q->where('name','User');
+    	})->get();
 
     	return response()->json([
 
-    		'message' => 'User Role Details',
-    		'Is User an Application User? ' => JWTAuth::parseToken()->authenticate()->hasRole('User'),
+    		'message' => 'These are the Application Users',
+    		'data' => $users,
     		'status_code' => 200
 
     	]);
