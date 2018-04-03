@@ -36,4 +36,11 @@ class Track extends Model
 		return Track::where('id',$id)->delete();
 	}//end of function
 
+	public static function getSearch($data)
+	{
+
+		return Track::where('name','LIKE',"%{$data}%")->get();
+
+	}//end of fuunctions
+
 }//end of class

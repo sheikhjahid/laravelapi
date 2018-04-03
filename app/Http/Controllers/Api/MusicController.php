@@ -24,9 +24,31 @@ class MusicController extends Controller
 
     }//end of function
 
-    public function search($id)
+    public function searchTrack(Request $request)
     {
-        return Track::find($id);
+        $searchInput = $request->name;
+        if(Track::getSearch($searchInput)==true)
+            {
+
+                return response()->json([
+
+                    'message' => 'Your Search Results',
+                    'data' => Track::getSearch($searchInput),
+                    'status_code' => 200
+
+                ]);
+
+            }//end of if
+            else
+            {
+                return response()->json([
+
+                    'message' => 'No data found!!',
+                    'status_code' => 404
+
+                ]);
+
+            }//end of else
 
     }//end of function
 

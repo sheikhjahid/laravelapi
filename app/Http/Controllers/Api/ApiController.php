@@ -135,7 +135,7 @@ class ApiController extends Controller
    		$data = $email->attachRole($role);
    		return response()->json([
    			                  'messages'=>'Role Assigned Successfully!!',
-   			                  'data'=>$data,
+   			                  'data'=>'User with email : '.$request->email.' was assigned as '.$request->name,
    			                  'status_code'=>200
    		                       ]);
    	    }//end of else
@@ -171,13 +171,14 @@ class ApiController extends Controller
    			$data = $name->attachPermission($display_name);
    			return response()->json([
    				'messages' => 'Permission assigned successfully',
-   				'data' => $data,
+   				'data' => $request->name." was assigned to ".$request->display_name,
    				'status_code' => 200
 
    			]);
    		}//end of if
    		
    }//end of function
+
 
     public function allUser()
     {
@@ -186,11 +187,12 @@ class ApiController extends Controller
 
     public function searchUser(Request $request)
     {
-    	$searchInput = $request->name;
-    	if (User::getUser($searchInput)==true)
+    	$searchname = $request->name;
+    	
+    	if (User::getUser($searchname)==true)
     		{
     			return response()->json(['message'=>'Found User!!',
-    									 'data' => User::getUser($searchInput),
+    									 'data' => User::getUser($searchname),
     									 'status_code' => 200]);
     		}//end of if
     		
@@ -211,6 +213,31 @@ class ApiController extends Controller
     public function deleteUser($id)
     {
     	return User::deleteData($id);
+    }//end of function
+
+    public function getAdmin()
+    {
+
+    	return response()->json([
+    		'message' => 'User Role Details',
+    		'Is User Admin?' => JWTAuth::parseToken()->authenticate()->hasRole('Admin'),
+    		'status_code' => 200
+
+    		]);
+
+    }//end of function
+
+    public function getUser()
+    {
+
+    	return response()->json([
+
+    		'message' => 'User Role Details',
+    		'Is User an Application User? ' => JWTAuth::parseToken()->authenticate()->hasRole('User'),
+    		'status_code' => 200
+
+    	]);
+
     }//end of function
 
 }//end of class

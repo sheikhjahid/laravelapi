@@ -20,9 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register','Api\ApiController@register');
 Route::post('login','Api\ApiController@login');
-Route::group(['middleware' => ['jwt.auth']], function () 
+Route::group(['middleware' => ['jwt.auth','admin']], function () 
 {
-	Route::get('get-profile', 'Api\ApiController@getAuthenticatedUser');
+	Route::get('get-profile-admin', 'Api\ApiController@getAuthenticatedUser');
 	Route::get('allTracks','Api\MusicController@index');
 	Route::post('addTrack','Api\MusicController@add');
 	Route::get('searchTrack/{id}', 'Api\MusicController@search');
@@ -36,7 +36,18 @@ Route::group(['middleware' => ['jwt.auth']], function ()
     Route::post('add_permissions','Api\ApiController@addPermissions');
     Route::post('assign_role','Api\ApiController@assignRole');
     Route::post('assign_permission','Api\ApiController@assignPermission');
-	Route::get('logout','Api\ApiController@logout');
+    Route::get('get_admin','Api\ApiController@getAdmin');
+	Route::get('logout-admin','Api\ApiController@logout');
+});
+
+Route::group(['middleware'=>['jwt.auth','user']], function()
+{
+	Route::get('get-profile-user', 'Api\ApiController@getAuthenticatedUser');
+	Route::get('allTrack','Api\MusicController@index');
+	Route::post('searchTrack', 'Api\MusicController@searchTrack');
+    Route::get('get_user','Api\ApiController@getUser');
+	Route::get('logout-user','Api\ApiController@logout');
+
 });
 
 ///////////////////////////////////////////////////////////////////////////

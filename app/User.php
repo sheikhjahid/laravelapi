@@ -42,9 +42,9 @@ class User extends Authenticatable
         return User::where('id',$id)->delete();
     }//end of function
 
-    public static function getUser($data)
+    public static function getUser($name)
     {
-        return User::where('email','LIKE',"%{$data}%")->orWhere('name','LIKE',"%{$data}%")->get();    
+        return User::where('name','LIKE',"%{$name}%")->get();    
     }//end of function 
 
     
