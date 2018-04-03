@@ -114,9 +114,9 @@ class ApiController extends Controller
    public function assignRole(Request $request)
    {
 
-   		$credentials = $request->only('email,name');
+   		$credentials = $request->only('email','name');
    		$rules = [
-   			'email' => 'required|email|max:255|unique:users',
+   			'email' => 'required|email|max:255',
    			'name' => 'required|max:255'
    		];
    		$validator = Validator::make($credentials,$rules);
@@ -128,25 +128,55 @@ class ApiController extends Controller
    				'status_code'=>404
    		         ]);
    		}//end of if
-
+   		else
+   		{	
    		$email = User::where('email',$request->email)->first();
    		$role = Role::where('name',$request->name)->first();
-
+   		$data = $email->attachRole($role);
    		return response()->json([
    			                  'messages'=>'Role Assigned Successfully!!',
-   			                  'data'=>$email->attachRole($role),
+   			                  'data'=>$data,
    			                  'status_code'=>200
    		                       ]);
-
+   	    }//end of else
    }//end of function
 
    public function assignPermission(Request $request)
    {
 
-   		$role = Role::where('name',$request->name)->first();
-   		$permission = Permission::where('display_name',$request->display_name)->first();
-   		return  $role->attachPermission($permission);
+   		$credentials = $request->only('name','display_name');
 
+   		$rules = [
+
+   			'name' => 'required|max:255',
+   			'display_name' => 'required|max:255'
+
+   		];
+
+   		$validator = Validator::make($credentials,$rules);
+
+   		if($validator->fails())
+   		{
+   			return response()->json([
+   				'success' => fail,
+   				'messages' => $validator->messages(),
+   				'status_code' => 404	
+
+   		        ]);	
+   		}	
+   		else
+   		{
+   			$name = Role::where('name',$request->name)->first();
+   			$display_name = Permission::where('display_name',$request->display_name)->first();
+   			$data = $name->attachPermission($display_name);
+   			return response()->json([
+   				'messages' => 'Permission assigned successfully',
+   				'data' => $data,
+   				'status_code' => 200
+
+   			]);
+   		}//end of if
+   		
    }//end of function
 
     public function allUser()
